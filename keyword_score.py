@@ -6,6 +6,9 @@ from typing import List
 
 from keys import consumer_key, consumer_secret
 
+print(consumer_key)
+print(consumer_secret)
+
 auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
 api = tweepy.API(auth)
 
@@ -13,8 +16,13 @@ def get_tweets(keyword: str) -> List[str]:
 
     all_tweets = []
 
-    for tweet in tweepy.Cursor(api.search, q=keyword, tweet_mode='extended', lang='es').items(10):
+    for tweet in tweepy.Cursor(api.search_tweets, q=keyword, tweet_mode='extended', lang='es').items(100):
         all_tweets.append(tweet.full_text)    
+
+   # for tweet in all_tweets:
+    #    print(tweet)
+
+
 
     return all_tweets
 
@@ -33,6 +41,8 @@ def get_sentiment(all_tweets: List[str]) -> List[float]:
     for tweet in all_tweets:
         blob = TextBlob(tweet)
         sentiment_scores.append(blob.sentiment.polarity)
+
+
 
     return sentiment_scores
 
@@ -57,5 +67,5 @@ if __name__ == "__main__":
     first_score = generate_average_sentiment_score(first_thing)
     second_score = generate_average_sentiment_score(second_thing)
 
-    print(f"Puntuacion Primera Keyword: {first_score}!")
-    print(f"Puntuacion Segunda Keyword: {second_score}!")
+    print(f"Puntuacion Primera Keyword: {first_score}")
+    print(f"Puntuacion Segunda Keyword: {second_score}")
