@@ -65,10 +65,17 @@ class Puntuacion(Resource):
 
     	first_score = generate_average_sentiment_score(kw1)
     	second_score = generate_average_sentiment_score(kw2)
+    	
+    	fscoreRound = "%.4f" % first_score
+    	sscoreRound = "%.4f" % second_score
 
-    	finaaaa = (f"Puntuacion Primera Keyword: {first_score}! Puntuacion Segunda Keyword: {second_score}!")
+    	#finaaaa = (f"{'kw1': '{first_score}!', 'kw2': '{second_score}!'}")
+    	if first_score > second_score:
+        	winner=kw1
+    	else:
+        	winner=kw2
 
-    	return finaaaa
+    	return jsonify(kw1=fscoreRound, kw2=sscoreRound, win=winner)
 
 apiSv.add_resource(Puntuacion, '/puntuacion')  # Route_1
 
