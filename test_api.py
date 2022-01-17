@@ -54,7 +54,7 @@ def generate_average_sentiment_score(keyword: str) -> int:
 
     return average_score
 
-class Employees(Resource):
+class Puntuacion(Resource):
     def get(self):
     	kw1 = request.args.get("keyword1")
     	kw2 = request.args.get("keyword2")
@@ -68,7 +68,7 @@ class Employees(Resource):
 
     	return finaaaa
 
-apiSv.add_resource(Employees, '/employees')  # Route_1
+apiSv.add_resource(Puntuacion, '/puntuacion')  # Route_1
 
 if __name__ == '__main__':
      app.run(port='5000')
