@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
+from flask_cors import CORS
 
 import tweepy
 from textblob import TextBlob
@@ -13,6 +14,7 @@ auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
 api = tweepy.API(auth)
 
 app = Flask(__name__)
+CORS(app)
 apiSv = Api(app)
 
 precision = 10
