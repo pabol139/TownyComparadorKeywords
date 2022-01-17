@@ -1,3 +1,6 @@
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
+
 import tweepy
 from textblob import TextBlob
 import preprocessor as p
@@ -9,11 +12,16 @@ from keys import consumer_key, consumer_secret
 auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
 api = tweepy.API(auth)
 
+app = Flask(__name__)
+apiSv = Api(app)
+
+precision = 10
+
 def get_tweets(keyword: str) -> List[str]:
 
     all_tweets = []
 
-    for tweet in tweepy.Cursor(api.search_tweets, q=keyword, tweet_mode='extended', lang='es').items(100):
+    for tweet in tweepy.Cursor(api.search_tweets, q=keyword, tweet_mode='extended', lang='es').items(precision):
         all_tweets.append(tweet.full_text)    
 
     return all_tweets
@@ -46,16 +54,21 @@ def generate_average_sentiment_score(keyword: str) -> int:
 
     return average_score
 
-if __name__ == "__main__":
+class Employees(Resource):
+    def get(self):
+    	kw1 = request.args.get("keyword1")
+    	kw2 = request.args.get("keyword2")
+    	global precision
+    	precision = int(request.args.get("precision"))
 
-    print("Primera Keyword:")
-    first_thing = input()
-    print("Segunda Keyword:")
-    second_thing = input()
-    print("\n")
+    	first_score = generate_average_sentiment_score(kw1)
+    	second_score = generate_average_sentiment_score(kw2)
 
-    first_score = generate_average_sentiment_score(first_thing)
-    second_score = generate_average_sentiment_score(second_thing)
+    	finaaaa = (f"Puntuacion Primera Keyword: {first_score}! Puntuacion Segunda Keyword: {second_score}!")
 
-    print(f"Puntuacion Primera Keyword: {first_score}!")
-    print(f"Puntuacion Segunda Keyword: {second_score}!")
+    	return finaaaa
+
+apiSv.add_resource(Employees, '/employees')  # Route_1
+
+if __name__ == '__main__':
+     app.run(port='5000')
